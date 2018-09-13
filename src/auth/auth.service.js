@@ -3,7 +3,7 @@
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var User = require('../api/user/user.model');
-var config = require('../config/environment');
+var config = require('../config/environment/index');
 var compose = require('composable-middleware');
 var validateJwt = expressJwt({ secret: config.secret });
 

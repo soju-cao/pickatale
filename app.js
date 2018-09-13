@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-const config = require('./config/environment');
+const config = require('./src/config/environment');
 const bodyParser = require('body-parser');
 
 // Connect to database
