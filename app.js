@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./config/environment');
+const bodyParser = require('body-parser');
 
 // Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);
@@ -17,6 +18,10 @@ mongoose.connection.on('error', function(err) {
 
 
 const app = express();
+// before router
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 require('./routes')(app);
 
 const server = require('http').createServer(app);
