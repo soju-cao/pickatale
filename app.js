@@ -6,6 +6,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./src/config/environment');
 const bodyParser = require('body-parser');
+const errorHandlerMiddleware = require('./src/util/express-js/errorHandlerMiddleware');
 
 // Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);
@@ -15,16 +16,14 @@ mongoose.connection.on('error', function(err) {
     }
 );
 
-
-
 const app = express();
+const server = require('http').createServer(app);
+
 // before router
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 require('./routes')(app);
-
-const server = require('http').createServer(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,16 +41,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
+app.use(errorHandlerMiddleware);
 
 // Start server
 server.listen(config.port, config.ip, function () {
